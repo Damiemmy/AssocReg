@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import logo from "../../assets/logo.png";
 import { apiInstance } from "../utils/axios";
+import { Link } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
 export default function Login() {
   const [formData, setFormData] = useState({
     reg_number: "",
@@ -8,58 +12,60 @@ export default function Login() {
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await apiInstance.post("token/", formData);
+      const { access, refresh } = response.data;
 
-  try {
-    const response = await apiInstance.post("token/", formData);
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
 
-    const { access, refresh } = response.data;
+      console.log("Login successful", response.data);
+      // navigate to dashboard here
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+    }
+  };
 
-    // store tokens
-    localStorage.setItem("access_token", access);
-    localStorage.setItem("refresh_token", refresh);
-
-    console.log("Login successful", response.data);
-
-    // later → navigate to dashboard
-  } catch (err) {
-    console.error(err.response?.data || err.message);
-  }
-};
-
- 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4
-                 bg-[radial-gradient(circle_at_top_left,#6366f1,transparent_40%),radial-gradient(circle_at_bottom_right,#22d3ee,transparent_40%),#0f172a]"
+      className="min-h-screen pt-28 pb-24 flex items-center justify-center px-4 relative overflow-hidden"
+      style={{
+        backgroundImage: "url('https://i.imgur.com/m8sUaTI.jpeg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
     >
-      <div
-        className="w-full max-w-[420px] rounded-2xl border border-white/25
-                   bg-white/10 backdrop-blur-xl shadow-2xl
-                   px-8 py-10 sm:px-10 animate-fadeIn"
-      >
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-indigo-900/80 via-blue-800/60 to-purple-700/70"></div>
+
+      <div className="relative w-full max-w-md bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-10 animate-fadeIn z-10">
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <img src={logo} alt="Site Logo" className="h-14 sm:h-16" />
+          <img
+            src={logo}
+            alt="Institution Logo"
+            className="h-16 w-20 sm:h-20 sm:w-20 animate-pulse"
+          />
         </div>
 
-        <h2 className="text-center text-white text-2xl font-semibold mb-1">
-          Welcome Back
+        {/* Header */}
+        <h2 className="text-center text-white text-3xl font-bold mb-2 tracking-wide">
+          AssocPay
         </h2>
-        <p className="text-center text-indigo-200 text-sm mb-8">
-          Login with your registration number
+        <p className="text-center text-blue-200 mb-8">
+          Welcome Back! Login to Continue
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Registration Number */}
-          <div className="relative">
+          <div className="relative group">
             <input
               type="text"
               name="reg_number"
@@ -67,29 +73,16 @@ export default function Login() {
               onChange={handleChange}
               required
               placeholder=" "
-              className="peer w-full rounded-xl border border-white/30
-                         bg-transparent px-4 py-3 text-gray-200
-                         focus:border-indigo-400 focus:ring-2
-                         focus:ring-indigo-400/40 outline-none"
+              className="peer w-full rounded-xl border border-white/30 bg-transparent px-4 py-3 text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/50 outline-none transition-all duration-300"
             />
-            <label
-              className="absolute left-4 top-1/2 -translate-y-1/2
-                         text-indigo-200 text-sm pointer-events-none
-                         transition-all
-                         peer-focus:-top-2 peer-focus:text-xs
-                         peer-focus:text-indigo-400 peer-focus:bg-[#0f172a]
-                         peer-focus:px-1
-                         peer-not-placeholder-shown:-top-2
-                         peer-not-placeholder-shown:text-xs
-                         peer-not-placeholder-shown:bg-[#0f172a]
-                         peer-not-placeholder-shown:px-1"
-            >
+            <label className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-200 text-sm pointer-events-none transition-all duration-300 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-indigo-400 peer-focus:bg-white/10 peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white/10 peer-not-placeholder-shown:px-1">
               Registration Number
             </label>
+            <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-indigo-500 via-blue-400 to-purple-500 transition-all group-focus:w-full"></span>
           </div>
 
           {/* Password */}
-          <div className="relative">
+          <div className="relative group">
             <input
               type="password"
               name="password"
@@ -97,41 +90,37 @@ export default function Login() {
               onChange={handleChange}
               required
               placeholder=" "
-              className="peer w-full rounded-xl border border-white/30
-                         bg-transparent px-4 py-3 text-gray-200
-                         focus:border-indigo-500 focus:ring-2
-                         focus:ring-indigo-400/40 outline-none"
+              className="peer w-full rounded-xl border border-white/30 bg-transparent px-4 py-3 text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/50 outline-none transition-all duration-300"
             />
-            <label
-              className="absolute left-4 top-1/2 -translate-y-1/2
-                         text-indigo-200 text-sm pointer-events-none
-                         transition-all
-                         peer-focus:-top-2 peer-focus:text-xs
-                         peer-focus:text-indigo-500 peer-focus:bg-[#0f172a]
-                         peer-focus:px-1
-                         peer-not-placeholder-shown:-top-2
-                         peer-not-placeholder-shown:text-xs
-                         peer-not-placeholder-shown:bg-[#0f172a]
-                         peer-not-placeholder-shown:px-1"
-            >
+            <label className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-200 text-sm pointer-events-none transition-all duration-300 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-indigo-400 peer-focus:bg-white/10 peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white/10 peer-not-placeholder-shown:px-1">
               Password
             </label>
+            <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-indigo-500 via-blue-400 to-purple-500 transition-all group-focus:w-full"></span>
           </div>
 
-          {/* Button */}
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full rounded-xl py-3 font-semibold text-white
-                       bg-gradient-to-br from-indigo-600 to-indigo-500
-                       hover:-translate-y-0.5 hover:shadow-xl
-                       transition"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-500 to-purple-500 text-white font-semibold text-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300"
           >
             Sign In
           </button>
+
+          {/* Signup redirect */}
+          <p className="text-center text-sm text-blue-200 mt-4">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-yellow-400 font-semibold hover:underline hover:text-yellow-300 transition"
+            >
+              Sign Up here
+            </Link>
+          </p>
         </form>
 
-        <p className="text-center text-indigo-200 text-xs mt-8">
-          © 2026 Your Institution • Secure Login
+        {/* Local Footer Text */}
+        <p className="text-center text-blue-200 text-xs mt-6">
+          © 2026 Federal University of Technology Minna • Secure Login
         </p>
       </div>
     </div>
