@@ -1,9 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { apiInstance } from "../utils/axios";
-import { Link } from "react-router-dom";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -25,7 +23,7 @@ export default function Login() {
       localStorage.setItem("refresh_token", refresh);
 
       console.log("Login successful", response.data);
-      // navigate to dashboard here
+      // TODO: navigate to dashboard
     } catch (err) {
       console.error(err.response?.data || err.message);
     }
@@ -44,7 +42,7 @@ export default function Login() {
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-tr from-indigo-900/80 via-blue-800/60 to-purple-700/70"></div>
 
-      <div className="relative w-full max-w-md bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-10 animate-fadeIn z-10">
+      <div className="relative w-full max-w-md bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-10 z-10">
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <img
@@ -73,12 +71,13 @@ export default function Login() {
               onChange={handleChange}
               required
               placeholder=" "
-              className="peer w-full rounded-xl border border-white/30 bg-transparent px-4 py-3 text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/50 outline-none transition-all duration-300"
+              className="peer w-full rounded-xl border border-white/30 bg-transparent px-4 py-3 text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/50 outline-none transition-all"
             />
-            <label className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-200 text-sm pointer-events-none transition-all duration-300 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-indigo-400 peer-focus:bg-white/10 peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white/10 peer-not-placeholder-shown:px-1">
+            <label className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-200 text-sm pointer-events-none transition-all
+              peer-focus:-top-2 peer-focus:text-xs peer-focus:text-indigo-400 peer-focus:bg-white/10 peer-focus:px-1
+              peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white/10 peer-not-placeholder-shown:px-1">
               Registration Number
             </label>
-            <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-indigo-500 via-blue-400 to-purple-500 transition-all group-focus:w-full"></span>
           </div>
 
           {/* Password */}
@@ -90,35 +89,46 @@ export default function Login() {
               onChange={handleChange}
               required
               placeholder=" "
-              className="peer w-full rounded-xl border border-white/30 bg-transparent px-4 py-3 text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/50 outline-none transition-all duration-300"
+              className="peer w-full rounded-xl border border-white/30 bg-transparent px-4 py-3 text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/50 outline-none transition-all"
             />
-            <label className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-200 text-sm pointer-events-none transition-all duration-300 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-indigo-400 peer-focus:bg-white/10 peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white/10 peer-not-placeholder-shown:px-1">
+            <label className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-200 text-sm pointer-events-none transition-all
+              peer-focus:-top-2 peer-focus:text-xs peer-focus:text-indigo-400 peer-focus:bg-white/10 peer-focus:px-1
+              peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white/10 peer-not-placeholder-shown:px-1">
               Password
             </label>
-            <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-indigo-500 via-blue-400 to-purple-500 transition-all group-focus:w-full"></span>
+          </div>
+
+          {/* Forgot Password */}
+          <div className="text-right">
+            <Link
+              to="/reset-password"
+              className="text-sm text-blue-300 hover:text-yellow-400 transition"
+            >
+              Forgot password?
+            </Link>
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-500 to-purple-500 text-white font-semibold text-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-500 to-purple-500 text-white font-semibold text-lg hover:scale-105 hover:shadow-2xl transition-transform"
           >
             Sign In
           </button>
 
           {/* Signup redirect */}
           <p className="text-center text-sm text-blue-200 mt-4">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               to="/signup"
-              className="text-yellow-400 font-semibold hover:underline hover:text-yellow-300 transition"
+              className="text-yellow-400 font-semibold hover:underline"
             >
               Sign Up here
             </Link>
           </p>
         </form>
 
-        {/* Local Footer Text */}
+        {/* Footer */}
         <p className="text-center text-blue-200 text-xs mt-6">
           © 2026 Federal University of Technology Minna • Secure Login
         </p>

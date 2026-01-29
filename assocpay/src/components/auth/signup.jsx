@@ -3,8 +3,12 @@ import logo from "../../assets/logo.png";
 import { apiInstance } from "../utils/axios";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function Signup() {
+  const router=useNavigate()
   const [formData, setFormData] = useState({
     full_name: "",
     reg_number: "",
@@ -23,6 +27,7 @@ export default function Signup() {
     try {
       const response = await apiInstance.post("/api/v1/user/register/", formData);
       console.log("Registration successful", response.data);
+      router('/')
     } catch (err) {
       console.error(err.response?.data || err.message);
     }
