@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { apiInstance } from "../utils/axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const Router=useNavigate();
   const [formData, setFormData] = useState({
     reg_number: "",
     password: "",
@@ -23,6 +25,8 @@ export default function Login() {
       localStorage.setItem("refresh_token", refresh);
 
       console.log("Login successful", response.data);
+      Router('/')
+
       // TODO: navigate to dashboard
     } catch (err) {
       console.error(err.response?.data || err.message);

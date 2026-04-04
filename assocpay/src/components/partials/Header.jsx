@@ -1,9 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const Router=useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false);
-
+   const access_token=localStorage.getItem("access_token")
+   console.log('ACCESS_TOKEN', access_token)
+  const handleLogout=()=>{
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    console.log('LOGGED OUT')
+    Router('/')
+  }
   return (
     <header className="fixed top-0 left-0 w-full z-50">
       {/* NAVBAR */}
@@ -26,15 +34,8 @@ export default function Header() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            {[
-              { to: "/", label: "Home" },
-              { to: "/associations", label: "Associations" },
-              { to: "/verify-receipt", label: "Verify Receipt" },
-              { to: "/login", label: "Login" },
-            ].map((item) => (
               <Link
-                key={item.label}
-                to={item.to}
+                to='/'
                 className="
                   text-white/90
                   hover:text-yellow-400
@@ -45,10 +46,70 @@ export default function Header() {
                   hover:after:w-full after:transition-all
                 "
               >
-                {item.label}
+                Home
               </Link>
-            ))}
-
+              <Link
+                to='/associations'
+                className="
+                  text-white/90
+                  hover:text-yellow-400
+                  transition
+                  relative
+                  after:absolute after:-bottom-1 after:left-0
+                  after:w-0 after:h-[2px] after:bg-yellow-400
+                  hover:after:w-full after:transition-all
+                "
+              >
+                Associations
+              </Link>
+              {access_token?(
+              <Link
+                to='/verify-receipt'
+                className="
+                  text-white/90
+                  hover:text-yellow-400
+                  transition
+                  relative
+                  after:absolute after:-bottom-1 after:left-0
+                  after:w-0 after:h-[2px] after:bg-yellow-400
+                  hover:after:w-full after:transition-all
+                "
+              >
+                Verify Receipt
+              </Link>):("")}
+              {access_token?(
+              <Link
+                to='login'
+                className="
+                  text-white/90
+                  hover:text-yellow-400
+                  transition
+                  relative
+                  after:absolute after:-bottom-1 after:left-0
+                  after:w-0 after:h-[2px] after:bg-yellow-400
+                  hover:after:w-full after:transition-all
+                "
+                onClick={handleLogout}
+              >
+                Logout
+              </Link>
+              ):(
+                <Link
+                to='login'
+                className="
+                  text-white/90
+                  hover:text-yellow-400
+                  transition
+                  relative
+                  after:absolute after:-bottom-1 after:left-0
+                  after:w-0 after:h-[2px] after:bg-yellow-400
+                  hover:after:w-full after:transition-all
+                "
+              >
+                Login
+              </Link>
+              )}
+            {access_token ? (
             <Link
               to="/signup"
               className="
@@ -59,9 +120,26 @@ export default function Header() {
                 shadow-lg shadow-purple-900/40
                 text-white
               "
+              
+            >
+              Event
+            </Link>
+            ):(
+              <Link
+              to="/signup"
+              className="
+                px-5 py-2 rounded-lg
+                bg-gradient-to-r from-indigo-600 to-purple-600
+                hover:from-purple-600 hover:to-indigo-600
+                transition
+                shadow-lg shadow-purple-900/40
+                text-white
+              "
+              
             >
               Get Started
             </Link>
+            )}
           </div>
 
           {/* Mobile Toggle */}
