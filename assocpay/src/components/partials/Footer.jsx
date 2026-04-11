@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="mt-5 backdrop-blur-xl bg-gradient-to-r from-indigo-700 via-blue-700 to-purple-700 border-t border-white/20 text-white shadow-xl">
+    <footer className="backdrop-blur-xl bg-gradient-to-r from-indigo-700 via-blue-700 to-purple-700 border-t border-white/20 text-white shadow-xl">
       <div className="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-3 gap-12">
 
         {/* Brand */}

@@ -99,7 +99,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-indigo-900 via-purple-800 to-yellow-500 text-white text-center">
+      <section className="py-20 bg-gradient-to-r from-indigo-900 via-purple-800 to-yellow-500 text-white text-center mb-5">
         <motion.h2 
           className="text-4xl md:text-5xl font-bold mb-6 drop-shadow-lg"
           initial={{ opacity: 0, scale: 0.8 }}
