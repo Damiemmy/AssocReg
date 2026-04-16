@@ -1,9 +1,31 @@
-import React, { useState } from 'react'
-
+import React, { useEffect, useState } from 'react'
+import ApiInstance from '../../service/Api'
 const Association = () => {
   const[associationName,setAssociationName]=useState('')
-  const[associationLogo,setAssociationLogo]=useState(null)
   const[associationDescription,setAssociationDescription]=useState('')
+
+  const addAssociation=  new FormData()
+  addAssociation.append("assoName",associationName)
+  addAssociation.append("assoDescription",associationDescription)
+
+  handleCreateAssociation=async()=>{
+    try{
+      const response=await ApiInstance.get('/create-association',addAssociation)
+      if (response.ok){
+        console.log(response.data)
+      }else{
+        console.log('An Error Occured')
+      }
+
+    }catch(err){
+      console.log(err.message)
+    }
+  }
+
+  useEffect(()=>{
+    console.log(associationName,associationDescription)
+  },[associationDescription,associationName])
+  
   return (
     <div className='w-full py-40 bg-white'>
         <div className='max-w-[1500px] px-6 text-2xl text-center py-5'>
@@ -18,6 +40,18 @@ const Association = () => {
                   onChange={(e)=>setAssociationName(e.target.value)}
                   required
                 />
+             
+                <textarea
+                  placeholder='Enter association Description'
+                  className='p-3 rounded-md w-full'
+                  onChange={(e)=>setAssociationDescription(e.target.value)}
+                  required
+                />
+                <button
+                  onClick={handleCreateAssociation}
+                >
+                  create
+                </button>
               </div>
             </div>
         </div>

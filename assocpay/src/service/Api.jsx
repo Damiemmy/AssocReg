@@ -1,6 +1,5 @@
 import axios from "axios";
-
-export const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://127.0.0.1:8000/"
+export const BaseUrl = "http://127.0.0.1:8000/"
 const ApiInstance =axios.create({
     baseURL:BaseUrl
 })
